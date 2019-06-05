@@ -25,7 +25,7 @@ versions.android_ktx = "1.2.0-alpha01"
 versions.androidx_lifecycle = "2.2.0-alpha01"
 versions.androidx_navigation = "2.1.0-alpha04"
 versions.androidx_room = '2.1.0-alpha06'
-versions.androidx_camerax= "1.0.0-alpha01"
+versions.androidx_camerax = "1.0.0-alpha02"
 versions.androidx_work = '2.0.1'
 versions.atsl_runner = "1.0.1"
 versions.crashlytics = "2.9.4@aar"
@@ -42,8 +42,8 @@ versions.retrofit = "2.3.0"
 versions.anko = '0.10.8'
 versions.picasso = '2.71828'
 
-versions.firebase_core = "16.0.1"
-versions.firebase_perf = "16.0.0"
+versions.firebase_core = "16.0.9"
+versions.firebase_perf = "20.0.0"
 
 ext.versions = versions
 
@@ -87,6 +87,7 @@ deps.test = test
 def firebase = [:]
 firebase.core = "com.google.firebase:firebase-core:$versions.firebase_core"
 firebase.perf = "com.google.firebase:firebase-perf:$versions.firebase_perf"
+firebase.ml_vision = "com.google.firebase:firebase-ml-vision:20.0.0"
 deps.firebase = firebase
 
 def databinding = [:]

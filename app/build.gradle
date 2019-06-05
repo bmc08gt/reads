@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'androidx.navigation.safeargs'
 apply plugin: "com.github.ben-manes.versions"
 
 android {
@@ -35,8 +36,17 @@ dependencies {
     implementation deps.jetpack.navigation_ui_ktx
     implementation deps.jetpack.camera_core
     implementation deps.jetpack.camera2
+    implementation (deps.firebase.core) {
+        exclude group: 'com.android.support', module: 'support-compat'
+    }
+    implementation (deps.firebase.ml_vision) {
+        exclude group: 'com.android.support', module: 'support-compat'
+    }
+    implementation deps.anko.commons
 
     testImplementation deps.junit
     androidTestImplementation deps.test.junit
     androidTestImplementation deps.test.espresso
 }
+
+apply plugin: 'com.google.gms.google-services'

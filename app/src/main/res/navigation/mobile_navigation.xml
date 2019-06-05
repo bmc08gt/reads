@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_dashboard">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.bmcreations.bookinfo.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+            android:id="@+id/navigation_dashboard"
+            android:name="com.bmcreations.bookinfo.ui.dashboard.DashboardFragment"
+            android:label="@string/title_dashboard"
+            tools:layout="@layout/fragment_dashboard" />
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.bmcreations.bookinfo.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+    <activity
+            android:id="@+id/navigation_camera"
+            android:name="com.bmcreations.bookinfo.ui.camera.CameraViewfinder"
+            android:label="@string/title_camera"
+    />
 
     <fragment
         android:id="@+id/navigation_notifications"

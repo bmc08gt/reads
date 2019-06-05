@@ -33,6 +33,8 @@ dependencies {
     implementation deps.jetpack.lifecycle_extensions
     implementation deps.jetpack.navigation_fragment_ktx
     implementation deps.jetpack.navigation_ui_ktx
+    implementation deps.jetpack.camera_core
+    implementation deps.jetpack.camera2
 
     testImplementation deps.junit
     androidTestImplementation deps.test.junit

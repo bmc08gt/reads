@@ -25,6 +25,7 @@ versions.android_ktx = "1.2.0-alpha01"
 versions.androidx_lifecycle = "2.2.0-alpha01"
 versions.androidx_navigation = "2.1.0-alpha04"
 versions.androidx_room = '2.1.0-alpha06'
+versions.androidx_camerax= "1.0.0-alpha01"
 versions.androidx_work = '2.0.1'
 versions.atsl_runner = "1.0.1"
 versions.crashlytics = "2.9.4@aar"
@@ -74,6 +75,8 @@ jetpack.room_compiler = "androidx.room:room-compiler:$versions.androidx_room"
 jetpack.roomktx = "androidx.room:room-ktx:$versions.androidx_room"
 jetpack.work = "androidx.work:work-runtime-ktx:$versions.androidx_work"
 jetpack.cardview = "androidx.cardview:cardview:1.0.0"
+jetpack.camera_core = "androidx.camera:camera-core:$versions.androidx_camerax"
+jetpack.camera2 = "androidx.camera:camera-camera2:$versions.androidx_camerax"
 deps.jetpack = jetpack
 
 def test = [:]

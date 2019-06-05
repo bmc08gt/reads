@@ -11,12 +11,6 @@
             android:label="@string/title_dashboard"
             tools:layout="@layout/fragment_dashboard" />
 
-    <activity
-            android:id="@+id/navigation_camera"
-            android:name="com.bmcreations.bookinfo.ui.camera.CameraViewfinder"
-            android:label="@string/title_camera"
-    />
-
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.bmcreations.bookinfo.ui.notifications.NotificationsFragment"

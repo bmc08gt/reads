@@ -44,8 +44,9 @@
 
     <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/capture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:scaleType="fitCenter"
             android:background="@android:color/transparent"
             android:src="@drawable/capture"
             app:layout_constraintTop_toBottomOf="@id/capture_gl"

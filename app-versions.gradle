@@ -1,0 +1,5 @@
+def appInfo = [:]
+
+appInfo.versionCode = 1
+appInfo.versionName = "1.0"
+ext.appInfo = appInfo

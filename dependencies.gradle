@@ -42,8 +42,11 @@ versions.retrofit = "2.3.0"
 versions.anko = '0.10.8'
 versions.picasso = '2.71828'
 
+versions.firebase_auth = "17.0.0"
+versions.firebase_auth_ui = "4.3.1"
 versions.firebase_core = "16.0.9"
 versions.firebase_perf = "20.0.0"
+versions.firebase_ml_vision = "20.0.0"
 
 ext.versions = versions
 
@@ -85,9 +88,11 @@ test.espresso = "androidx.test.espresso:espresso-core:3.2.0"
 deps.test = test
 
 def firebase = [:]
+firebase.auth = "com.google.firebase:firebase-auth:$versions.firebase_auth"
+firebase.auth_ui = "com.firebaseui:firebase-ui-auth:$versions.firebase_auth_ui"
 firebase.core = "com.google.firebase:firebase-core:$versions.firebase_core"
 firebase.perf = "com.google.firebase:firebase-perf:$versions.firebase_perf"
-firebase.ml_vision = "com.google.firebase:firebase-ml-vision:20.0.0"
+firebase.ml_vision = "com.google.firebase:firebase-ml-vision:$versions.firebase_ml_vision"
 deps.firebase = firebase
 
 def databinding = [:]
@@ -130,5 +135,6 @@ deps.expiringmap = "net.jodah:expiringmap:$versions.expiringmap"
 deps.slidinguppanel = "com.sothree.slidinguppanel:library:$versions.slidinguppanel"
 deps.picasso = "com.squareup.picasso:picasso:$versions.picasso"
 deps.db_debug = "com.amitshekhar.android:debug-db:1.0.6"
+deps.html_recycler = "com.github.m7mdra:HtmlRecycler:0.1.11"
 
 ext.deps = deps

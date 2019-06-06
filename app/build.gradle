@@ -25,6 +25,9 @@ android {
 
 dependencies {
     implementation deps.kotlin.stdlib
+    implementation deps.kotlin.coroutinesCore
+    implementation deps.kotlin.coroutinesAndroid
+
     implementation deps.jetpack.appcompat
     implementation deps.jetpack.corektx
     implementation deps.jetpack.material
@@ -36,6 +39,9 @@ dependencies {
     implementation deps.jetpack.navigation_ui_ktx
     implementation deps.jetpack.camera_core
     implementation deps.jetpack.camera2
+
+    implementation deps.firebase.auth
+    implementation deps.firebase.auth_ui
     implementation (deps.firebase.core) {
         exclude group: 'com.android.support', module: 'support-compat'
     }
@@ -44,7 +50,14 @@ dependencies {
     }
     implementation deps.anko.commons
 
-    testImplementation deps.junit
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.gson
+    implementation deps.retrofit.coroutines
+    implementation deps.gson
+    implementation deps.okhttp3
+    implementation deps.okhttp3_logging
+
+    testImplementation deps.test.junit
     androidTestImplementation deps.test.junit
     androidTestImplementation deps.test.espresso
 }

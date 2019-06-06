@@ -3,8 +3,6 @@ package com.bmcreations.bookinfo.ui.camera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import android.util.DisplayMetrics
 import android.util.Rational
 import android.util.Size
@@ -12,43 +10,32 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.bmcreations.bookinfo.R
 import com.bmcreations.bookinfo.extensions.FLAGS_FULLSCREEN
+import com.bmcreations.bookinfo.extensions.getViewModel
 import com.bmcreations.bookinfo.extensions.isPermissionGranted
+import com.bmcreations.bookinfo.network.Outcome
 import kotlinx.android.synthetic.main.camera_viewfinder.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
-import java.io.File
 
 class CameraViewfinder: AppCompatActivity(), LifecycleOwner, AnkoLogger {
 
     private var lensFacing = CameraX.LensFacing.BACK
     private var imageCapture: ImageCapture? = null
 
+    private val vm by lazy {
+        getViewModel { BookCaptureViewModel.create(this) }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.camera_viewfinder)
 
         up_nav.setOnClickListener { finish() }
-        capture.setOnClickListener {
-            val file = File(externalMediaDirs.first(),
-                "reads-${System.currentTimeMillis()}.jpg")
-            imageCapture?.takePicture(file, object: ImageCapture.OnImageSavedListener {
-                override fun onImageSaved(file: File) {
-                    info { "Photo capture success: ${file.absolutePath}" }
-                    CameraBookScraper(this@CameraViewfinder).apply {
-                        this.analyze(file)
-                    }
-                }
-
-                override fun onError(useCaseError: ImageCapture.UseCaseError, message: String, cause: Throwable?) {
-                    toast("Photo capture failed: $message")
-                    info { "Photo capture failed: $message" }
-                    cause?.printStackTrace()
-                }
-            })
-        }
+        capture.setOnClickListener { vm.capture(imageCapture) }
 
         // Request camera permissions
         if (allPermissionsGranted()) {
@@ -57,6 +44,19 @@ class CameraViewfinder: AppCompatActivity(), LifecycleOwner, AnkoLogger {
             ActivityCompat.requestPermissions(
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
+
+        observe()
+    }
+
+    private fun observe() {
+        vm.results.observe(this, Observer {
+            when (it) {
+                is Outcome.Success -> info {
+                    "kind=${it.data.kind}, count=${it.data.count}, results=${it.data.results.joinToString(separator = ",") { v -> v.volumeInfo?.title ?: "unknown" }}"
+                }
+                is Outcome.Failure -> info { it.e.localizedMessage }
+            }
+        })
     }
 
     override fun onResume() {

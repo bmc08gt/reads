@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Rational
 import android.util.Size
+import android.view.View
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
@@ -16,6 +18,12 @@ import com.bmcreations.bookinfo.extensions.FLAGS_FULLSCREEN
 import com.bmcreations.bookinfo.extensions.getViewModel
 import com.bmcreations.bookinfo.extensions.isPermissionGranted
 import com.bmcreations.bookinfo.network.Outcome
+import com.bmcreations.bookinfo.widget.behavior.AnchorPointBottomSheetBehavior
+import com.bmcreations.bookinfo.widget.behavior.AnchorPointState
+import com.bmcreations.bookinfo.widget.behavior.SlideDirection
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.book_result_top_match_segue.view.*
+import kotlinx.android.synthetic.main.book_results_bottom_sheet.*
 import kotlinx.android.synthetic.main.camera_viewfinder.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -25,9 +33,33 @@ class CameraViewfinder: AppCompatActivity(), LifecycleOwner, AnkoLogger {
 
     private var lensFacing = CameraX.LensFacing.BACK
     private var imageCapture: ImageCapture? = null
+    private var preview: Preview? = null
 
     private val vm by lazy {
         getViewModel { BookCaptureViewModel.create(this) }
+    }
+
+    private val behavior: AnchorPointBottomSheetBehavior<View> by lazy {
+        AnchorPointBottomSheetBehavior.from(book_selection_sheet).also {
+            it.addBottomSheetCallback(object : AnchorPointBottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float, slideDirection: SlideDirection) {
+                }
+
+                override fun onStateChanged(@NonNull bottomSheet: View, newState: AnchorPointState) {
+                    info { "newState=$newState" }
+                    when (newState) {
+                        AnchorPointState.Hidden,
+                        AnchorPointState.ForceHidden,
+                        AnchorPointState.Collapsed-> {
+                            bottomSheet.requestLayout()
+                        }
+                        else -> {
+                            bottomSheet.requestLayout()
+                        }
+                    }
+                }
+            })
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +83,21 @@ class CameraViewfinder: AppCompatActivity(), LifecycleOwner, AnkoLogger {
     private fun observe() {
         vm.results.observe(this, Observer {
             when (it) {
-                is Outcome.Success -> info {
-                    "kind=${it.data.kind}, count=${it.data.count}, results=${it.data.results.joinToString(separator = ",") { v -> v.volumeInfo?.title ?: "unknown" }}"
+                is Outcome.Success -> {
+                    if (it.data.count == 0) {
+                        toast("Unable to find match. Please try again.")
+                    } else {
+                        it.data.results.firstOrNull()?.let { bv ->
+                            book_result_top_match.title.text = bv.volumeInfo?.title
+                            book_result_top_match.author.text = bv.volumeInfo?.authors?.joinToString(",")
+                            Picasso.get()
+                                .load(bv.volumeInfo?.imageLinks?.thumbnail?.replace("http", "https"))
+                                .error(R.drawable.book_empty_cover)
+                                .into(book_result_top_match.book_thumbnail)
+
+                            behavior.state = AnchorPointState.Anchor
+                        }
+                    }
                 }
                 is Outcome.Failure -> info { it.e.localizedMessage }
             }
@@ -86,7 +131,7 @@ class CameraViewfinder: AppCompatActivity(), LifecycleOwner, AnkoLogger {
         }.build()
 
         // Use the auto-fit preview builder to automatically handle size and orientation changes
-        val preview = AutoFitPreviewBuilder.build(viewFinderConfig, view_finder)
+        preview = AutoFitPreviewBuilder.build(viewFinderConfig, view_finder)
 
         // Set up the capture use case to allow users to take photos
         val imageCaptureConfig = ImageCaptureConfig.Builder().apply {
@@ -96,6 +141,7 @@ class CameraViewfinder: AppCompatActivity(), LifecycleOwner, AnkoLogger {
             // CameraX optimize for whatever specific resolution best fits requested capture mode
             setTargetAspectRatio(screenAspectRatio)
             setTargetRotation(view_finder.display.rotation)
+            setFlashMode(FlashMode.AUTO)
         }.build()
 
         imageCapture = ImageCapture(imageCaptureConfig)

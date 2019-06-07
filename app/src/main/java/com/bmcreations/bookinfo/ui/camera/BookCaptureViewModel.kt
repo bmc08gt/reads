@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bmcreations.bookinfo.extensions.uiScope
 import com.bmcreations.bookinfo.network.Outcome
-import com.bmcreations.bookinfo.network.book.model.BookReview
-import com.bmcreations.bookinfo.network.book.model.BookVolume
 import com.bmcreations.bookinfo.network.book.model.BookVolumeResult
 import com.bmcreations.bookinfo.network.book.repository.BookRepository
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +13,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import java.io.File
+
 
 class BookCaptureViewModel private constructor(val context: Context): ViewModel(), AnkoLogger {
 
